@@ -148,10 +148,85 @@
                 opacity: 1;
             }
         }
+        
+        /* musik */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+        }
+        .popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80vw; /* Menggunakan vw agar responsif */
+            max-width: 400px; /* Batas maksimum lebar */
+            height: auto; /* Menggunakan tinggi otomatis */
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            animation: fadeIn 1s ease-in-out;
+            color: white;
+        }
+        .popup h2 {
+            margin-top: 15px;
+            font-size: 4vw; /* Menggunakan vw agar responsif */
+        }
+        .popup p {
+            font-size: 3vw; /* Menggunakan vw agar responsif */
+            margin-bottom: 20px;
+        }
+        .btn {            
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+            width: calc(100% - 20px); /* Menyesuaikan ukuran tombol */
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
     </style>
 </head> 
 <body> 
+    <div class="popup-overlay" id="initialPopup">
+        <div class="popup">
+            <!-- Konten popup -->
+            <h3>Selamat Datang di Gallery</h3>
+            <p></p>
+            
+            <!-- Tombol tutup -->
+            <button class="btn btn-dark" id="closePopup">Okee</button>
+
+            <!-- Audio untuk musik latar belakang -->
+            <audio id="backgroundMusic" autoplay loop>
+                <source src="PhotoSong.mp3" type="audio/mpeg">
+                Maaf, browser Anda tidak mendukung pemutaran audio.
+            </audio>
+        </div>
+    </div>
     <div id="wrapper"> 
+    
         <div id="animated-text">
             <h2>Gallery</h2>
         </div>
@@ -235,7 +310,49 @@
                     setTimeout(typeText, 250); // Set animation speed (250ms)
                 }
             }
-            typeText(); // Start the animation
+
+            // Fungsi untuk menampilkan popup
+            function showPopup() {
+                var initialPopup = document.getElementById("initialPopup");
+                initialPopup.style.display = "block";
+            }
+
+            // Fungsi untuk menyembunyikan popup
+            function closePopup() {
+                var initialPopup = document.getElementById("initialPopup");
+                initialPopup.style.display = "none";
+                startAutoScroll();
+                showBaekSeongmin();
+            }
+
+            // Tambahkan event listener ke tombol tutup popup
+            var closePopupButton = document.getElementById("closePopup");
+            closePopupButton.addEventListener("click", closePopup);
+
+            // Tampilkan popup saat memuat halaman (Anda bisa mengatur delay jika diperlukan)
+            window.addEventListener("load", showPopup);
+
+            function playMusic() {
+                var audio = document.getElementById("backgroundMusic");
+                audio.play();
+            }
+
+            // Fungsi untuk menampilkan "Baek Seongmin" dengan animasi mengetik
+            function showBaekSeongmin() {
+                var baekSeongmin = document.getElementById("baekSeongmin");
+                baekSeongmin.style.display = "block";
+                baekSeongmin.style.animation = "typing 4s steps(40, end), blink-caret 0.75s step-end infinite";
+            }
+
+            // Tambahkan event listener ke tombol
+            var closePopup = document.getElementById("closePopup");
+            closePopup.addEventListener("click", playMusic);
+
+            // Menjalankan animasi mengetik setelah tombol pada popup diklik
+            closePopup.addEventListener("click", function () {
+                animatedText.classList.add("animated");
+                typeText();
+            });
         });
     </script>
 </body> 
